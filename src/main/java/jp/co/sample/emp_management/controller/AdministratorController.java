@@ -33,7 +33,7 @@ public class AdministratorController {
 
 	@Autowired
 	private AdministratorService administratorService;
-	
+
 	@Autowired
 	private HttpSession session;
 
@@ -46,7 +46,7 @@ public class AdministratorController {
 	public InsertAdministratorForm setUpInsertAdministratorForm() {
 		return new InsertAdministratorForm();
 	}
-	
+
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
 	 * 
@@ -73,20 +73,19 @@ public class AdministratorController {
 	/**
 	 * 管理者情報を登録します.
 	 * 
-	 * @param form
-	 *            管理者情報用フォーム
+	 * @param form 管理者情報用フォーム
 	 * @return ログイン画面へリダイレクト
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result) {
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			return toInsert();
 		}
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		Administrator mailCheck = administratorService.findByMailAddress(administrator.getMailAddress());
-		if(mailCheck != null) {
+		if (mailCheck != null) {
 			session.setAttribute("mailCheck", "既に登録済みのメールアドレスです");
 			return toInsert();
 		}
@@ -111,10 +110,8 @@ public class AdministratorController {
 	/**
 	 * ログインします.
 	 * 
-	 * @param form
-	 *            管理者情報用フォーム
-	 * @param result
-	 *            エラー情報格納用オブッジェクト
+	 * @param form   管理者情報用フォーム
+	 * @param result エラー情報格納用オブッジェクト
 	 * @return ログイン後の従業員一覧画面
 	 */
 	@RequestMapping("/login")
@@ -124,9 +121,10 @@ public class AdministratorController {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}
+		session.setAttribute("administrator", administrator);
 		return "forward:/employee/showList";
 	}
-	
+
 	/////////////////////////////////////////////////////
 	// ユースケース：ログアウトをする
 	/////////////////////////////////////////////////////
@@ -140,18 +138,25 @@ public class AdministratorController {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
+
 	/////////////////////////////////////////////////////
 	// ユースケース：パスワードをチェックする
 	/////////////////////////////////////////////////////
+	/**
+	 * パスワードが一致しているかを非同期で確認する.
+	 * 
+	 * @param password        入力したパスワード
+	 * @param confirmPassword 確認用の入力したパスワード
+	 * @return 一致不一致の結果
+	 */
 	@ResponseBody
-	@RequestMapping(value="/check",method= RequestMethod.POST)
-	public Map<String,String> check(String password, String confirmPassword){
-		Map<String,String> map = new HashMap<>();
+	@RequestMapping(value = "/check", method = RequestMethod.POST)
+	public Map<String, String> check(String password, String confirmPassword) {
+		Map<String, String> map = new HashMap<>();
 		String confirmPasswordResult = null;
-		if(password.equals(confirmPassword)) {
+		if (password.equals(confirmPassword)) {
 			confirmPasswordResult = "パスワードが一致しました";
-		}else {
+		} else {
 			confirmPasswordResult = "パスワードが一致していません";
 		}
 		map.put("confirmPasswordResult", confirmPasswordResult);
