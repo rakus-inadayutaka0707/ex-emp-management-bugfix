@@ -59,7 +59,9 @@
 										<label th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" class="error-messages">
 											メールアドレスを入力してください
 										</label>
+
 										<label th:if="${session.mailCheckResult} != null" th:text="${session.mailCheckResult} + は既に登録されたメールアドレスです" class="error-messages"></label>
+
 										<input type="text" name="mailAddress" id="mailAddress" class="form-control" placeholder="yamada@mail.com"
 											 th:field="*{mailAddress}" th:errorclass="error-input" value="yamada@mail.com">
 									</div>
@@ -80,11 +82,24 @@
 									</div>
 								</div>
 							</div>
+							<!-- 確認用パスワード -->
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-12">
+										<label for="password">
+											確認用パスワード:
+										</label>
+										<label id="confirmPasswordResult" class="error-messages">
+										</label>
+										<input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder="confirm password">
+									</div>
+								</div>
+							</div>
 							<!-- 登録ボタン -->
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-12">
-										<button type="submit" class="btn btn-primary">登録</button>
+										<button type="submit" class="btn btn-primary" id="adminInsertButton">登録</button>
 									</div>
 								</div>
 							</div>
@@ -102,5 +117,6 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../../static/js/bootstrap.min.js"></script>
+	<script th:src="@{/js/main.js}"></script>
 </body>
 </html>

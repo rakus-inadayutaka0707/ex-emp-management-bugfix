@@ -52,4 +52,14 @@ public class EmployeeService {
 	public void update(Employee employee) {
 		employeeRepository.update(employee);
 	}
+	
+	/**
+	 * 名前から曖昧検索を行う.
+	 * 
+	 * @param searchName 検索したい名前
+	 * @return 検索した結果
+	 */
+	public List<Employee> findBySearchLikeName(String searchName){
+		return employeeRepository.findByName(searchName);
+	}
 }
