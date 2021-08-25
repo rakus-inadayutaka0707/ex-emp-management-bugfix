@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.sample.emp_management.domain.Employee;
 import jp.co.sample.emp_management.form.UpdateEmployeeForm;
@@ -91,5 +92,19 @@ public class EmployeeController {
 		employee.setDependentsCount(form.getIntDependentsCount());
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
+	}
+	
+	/////////////////////////////////////////////////////
+	// ユースケース：従業員詳細を更新する
+	/////////////////////////////////////////////////////
+	@RequestMapping("/searchName")
+	public String searchName(String searchName, RedirectAttributes redirectAttributes, Model model) {
+		List<Employee> employeeList = employeeService.findBySearchName(searchName);
+		if(employeeList == null) {
+			redirectAttributes.addFlashAttribute("searchNameResult", "1件も該当しなかったため全件表示します");
+			return "redirect:/employee/showList";
+		}
+		model.addAttribute("employeeList",employeeList);
+		return "employee/list";
 	}
 }
