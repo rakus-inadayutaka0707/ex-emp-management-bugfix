@@ -80,6 +80,14 @@ public class AdministratorController {
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
+		
+		Administrator mailCheck = administratorService.findByMailAddress(administrator.getMailAddress());
+		if(mailCheck != null){
+			session.setAttribute("mailCheckResult", administrator.getMailAddress());
+			return toInsert();
+		}
+		session.removeAttribute("mailCheckResult");
+		
 		administratorService.insert(administrator);
 		return "redirect:/";
 	}
