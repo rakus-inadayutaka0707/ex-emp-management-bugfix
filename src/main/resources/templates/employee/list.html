@@ -37,7 +37,7 @@
 						<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員管理</a></li>
 					</ul>
 					<p class="navbar-text navbar-right">
-						<span th:text="${administratorName}">山田太郎</span>さんこんにちは！
+						<span th:text="${session.administrator.name}">山田太郎</span>さんこんにちは！
 						&nbsp;&nbsp;&nbsp;
 						<a href="../administrator/login.html" class="navbar-link" th:href="@{/logout}">ログアウト</a>
 					</p>
@@ -83,14 +83,20 @@
 								</a>
 							</td>
 							<td>
-								<span th:text="${employee.hireDate}">2016/12/1</span>
+								<span th:text="${#dates.format(employee.hireDate,'yyyy年MM月dd日')}">2016/12/1</span>
 							</td>
 							<td>
 								<span th:text="${employee.dependentsCount} + '人'">3人</span>
 							</td>
 						</tr>
 					</tbody>
+					<tbody th:if="${employeeList} == null">
+						<tr>
+							<th th:text="${notSearchName}" colspan="3"></th>
+						</tr>
+					</tbody>
 				</table>
+				
 
 
 				<!-- ここから下を編集する必要はありません -->
