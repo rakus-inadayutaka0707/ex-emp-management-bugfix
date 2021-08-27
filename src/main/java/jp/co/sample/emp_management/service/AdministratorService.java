@@ -17,7 +17,7 @@ import jp.co.sample.emp_management.security.SecurityConfiguration;
 @Service
 @Transactional
 public class AdministratorService {
-	
+
 	@Autowired
 	private AdministratorRepository administratorRepository;
 	
@@ -33,12 +33,13 @@ public class AdministratorService {
 		administrator.setPassword(securityConfiguration.passwordEncoder.encode(administrator.getPassword()));
 		administratorRepository.insert(administrator);
 	}
-	
+
 	/**
 	 * ログインをします.
+	 * 
 	 * @param mailAddress メールアドレス
-	 * @param password パスワード
-	 * @return 管理者情報　存在しない場合はnullが返ります
+	 * @param password    パスワード
+	 * @return 管理者情報 存在しない場合はnullが返ります
 	 */
 	public Administrator login(String mailAddress, String password) {
 		Administrator administrator = administratorRepository.findByMailAddress(mailAddress);
@@ -46,5 +47,16 @@ public class AdministratorService {
 			administrator = null;
 		}
 		return administrator;
+	}
+
+	/**
+	 * メールアドレスから管理者情報を取得します.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return 管理者情報 存在しない場合はnullを返します
+	 */
+
+	public Administrator findByMailAddress(String MailAddress) {
+		return administratorRepository.findByMailAddress(MailAddress);
 	}
 }
