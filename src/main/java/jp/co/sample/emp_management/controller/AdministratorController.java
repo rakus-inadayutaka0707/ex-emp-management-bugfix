@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,7 +79,13 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result) {
-		if (result.hasErrors()) {
+		Administrator mailCheck = administratorService.findByMailAddress(form.getMailAddress());
+		if(mailCheck != null) {
+			FieldError fieldError = new FieldError(result.getObjectName(),"mailAddress","既に登録されているメールアドレスです");
+			result.addError(fieldError);
+		}
+		if(result.hasErrors()) {
+
 			return toInsert();
 		}
 		Administrator administrator = new Administrator();
