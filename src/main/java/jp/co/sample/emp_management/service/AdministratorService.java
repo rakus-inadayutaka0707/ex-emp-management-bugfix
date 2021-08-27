@@ -1,12 +1,12 @@
 package jp.co.sample.emp_management.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.repository.AdministratorRepository;
-import jp.co.sample.emp_management.security.SecurityConfiguration;
 
 /**
  * 管理者情報を操作するサービス.
@@ -20,9 +20,9 @@ public class AdministratorService {
 
 	@Autowired
 	private AdministratorRepository administratorRepository;
-	
+
 	@Autowired
-	private SecurityConfiguration securityConfiguration;
+	public PasswordEncoder passwordEncoder;
 
 	/**
 	 * 管理者情報を登録します.
@@ -30,7 +30,7 @@ public class AdministratorService {
 	 * @param administrator 管理者情報
 	 */
 	public void insert(Administrator administrator) {
-		administrator.setPassword(securityConfiguration.passwordEncoder.encode(administrator.getPassword()));
+		administrator.setPassword(passwordEncoder.encode(administrator.getPassword()));
 		administratorRepository.insert(administrator);
 	}
 
@@ -43,7 +43,7 @@ public class AdministratorService {
 	 */
 	public Administrator login(String mailAddress, String password) {
 		Administrator administrator = administratorRepository.findByMailAddress(mailAddress);
-		if(!(securityConfiguration.passwordEncoder.matches(password, administrator.getPassword()))) {
+		if(!(passwordEncoder.matches(password, administrator.getPassword()))) {
 			administrator = null;
 		}
 		return administrator;
