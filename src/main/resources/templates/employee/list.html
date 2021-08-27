@@ -50,7 +50,7 @@
 		<!-- パンくずリスト -->
 		<div class="breadcrumb">
 			<a href="list.html" class="active" th:href="@{/employee/showList}">従業員リスト</a>
-			<form th:action="@{/employee/findByName}" th:object="${employeeSearchForm}" method="post" class="search">
+			<form th:action="@{/employee/searchName}" method="post" class="breadcrumbRight">
 				名前検索:<input type="text" name="searchName" id="searchName">
 				<button class="btn-primary">検索</button>
 			</form>
@@ -73,6 +73,9 @@
 						</tr>
 					</thead>
 					<tbody>
+						<tr th:if="${searchNameResult} != null">
+							<th th:text="${searchNameResult}" colspan="3"></th>
+						</tr>
 						<tr th:each="employee : ${employeeList}">
 							<td>
 								<a href="detail.html" th:href="@{'/employee/showDetail?id=' + ${employee.id}}">

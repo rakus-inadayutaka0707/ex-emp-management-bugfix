@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.sample.emp_management.domain.Employee;
 import jp.co.sample.emp_management.form.UpdateEmployeeForm;
@@ -94,16 +95,16 @@ public class EmployeeController {
 	}
 	
 	/////////////////////////////////////////////////////
-	// ユースケース：従業員を名前で曖昧検索する
+	// ユースケース：従業員詳細を更新する
 	/////////////////////////////////////////////////////
-	@RequestMapping("/findByName")
-	public String findByName(String searchName, Model model) {
-		List<Employee> employeeList = employeeService.findBySearchLikeName(searchName);
-		model.addAttribute("employeeList",employeeList);
-		System.out.println(employeeList);
+	@RequestMapping("/searchName")
+	public String searchName(String searchName, RedirectAttributes redirectAttributes, Model model) {
+		List<Employee> employeeList = employeeService.findBySearchName(searchName);
 		if(employeeList == null) {
-			model.addAttribute("notSearchName", "1件もありませんでした");
+			redirectAttributes.addFlashAttribute("searchNameResult", "1件も該当しなかったため全件表示します");
+			return "redirect:/employee/showList";
 		}
+		model.addAttribute("employeeList",employeeList);
 		return "employee/list";
 	}
 }

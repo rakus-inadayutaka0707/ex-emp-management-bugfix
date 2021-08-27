@@ -86,18 +86,18 @@ public class EmployeeRepository {
 	}
 
 	/**
-	 * 名前から曖昧検索を行う.
+	 * 名前の曖昧検索をします.
 	 * 
-	 * @param searchName 検索したい名前
+	 * @param searchName 検索したいキーワード
 	 * @return 検索した結果
 	 */
-	public List<Employee> findByName(String searchName) {
-		String sql = "select id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count from employees where name like :name order by hire_date asc;";
+	public List<Employee> findBySearchName(String searchName) {
+		String sql = "select id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count from employees where name like :name order by hire_date;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + searchName + "%");
-		List<Employee> searchNameList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
-		if(searchNameList.size() == 0) {
+		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+		if(employeeList.size() == 0) {
 			return null;
 		}
-		return searchNameList;
+		return employeeList;
 	}
 }
