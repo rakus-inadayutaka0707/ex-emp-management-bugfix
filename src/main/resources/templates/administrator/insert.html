@@ -82,16 +82,18 @@
 									</div>
 								</div>
 							</div>
-							<!-- 確認用パスワード -->
+							<!-- パスワード -->
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-12">
-										<label for="password">
+										<label for="confirmPassword">
 											確認用パスワード:
 										</label>
-										<label id="confirmPasswordResult" class="error-messages">
+										<label th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="error-messages">
+											パスワードを入力してください
 										</label>
-										<input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder="confirm password">
+										<input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder="confirm password"
+											 th:field="*{confirmPassword}" th:errorclass="error-input" value="xxxxxxxx">
 									</div>
 								</div>
 							</div>
